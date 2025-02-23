@@ -225,3 +225,97 @@
   Данные о покупке сохраняются в базе данных.
   Пользователь получает уведомление с подтверждением.
 
+
+
+API Методы
+1. API метод: Обновление статуса покупки
+  Метод: POST /api/purchase/update
+  Описание: Этот метод обновляет статус товара в списке покупок пользователя (например, отмечает товар как купленный).
+
+Параметры:
+  user_id (string): Идентификатор пользователя.
+  item_id (string): Идентификатор товара.
+  quantity (integer): Количество купленных единиц.
+  status (string): Статус товара, например, “куплен” или “не куплен”.
+
+2. API метод: Получение обновленного списка покупок
+  Метод: GET /api/purchase/list
+  Описание: Этот метод возвращает список всех товаров с их текущим статусом для указанного пользователя.
+
+Параметры:
+  user_id (string): Идентификатор пользователя.
+
+3. API метод: Отметить товар как не купленный
+  Метод: POST /api/purchase/reset
+  Описание: Этот метод позволяет сбросить статус товара (например, вернуть его в статус “не куплен”).
+
+Параметры:
+  user_id (string): Идентификатор пользователя.
+  item_id (string): Идентификатор товара.
+
+
+
+ЗАДАНИЕ 6 
+Основные сложности разработки:
+ 1. Синхронизация данных между устройствами и онлайн/оффлайн режимом.
+ 2. Обработка ошибок и исключений, например, при потере соединения.
+ 3. Безопасность данных при передаче и хранении.
+
+Вопросы заказчику:
+ 1. Планируется ли интеграция с магазинами?
+ 2. Какие требования к безопасности данных?
+ 3. Нужен ли офлайн-режим?
+
+
+
+ЗАДАНИЕ 7 
+1. Общая стоимость книг для каждого автора:
+  
+   SELECT 
+       Authors.AuthorName, 
+       SUM(Books.Price) AS TotalPrice
+   FROM 
+       Books
+   JOIN 
+       Authors ON Books.AuthorId = Authors.Id
+   GROUP BY 
+       Authors.AuthorName
+   ORDER BY 
+       TotalPrice DESC;
+
+2. Стоимость книг автора превышает 1500:
+  
+   SELECT 
+       Authors.AuthorName, 
+       SUM(Books.Price) AS TotalPrice
+   FROM 
+       Books
+   JOIN 
+       Authors ON Books.AuthorId = Authors.Id
+   GROUP BY 
+       Authors.AuthorName
+   HAVING 
+       SUM(Books.Price) > 1500;
+
+3. Авторы с количеством книг:
+  
+   SELECT 
+       Authors.AuthorName, 
+       COUNT(Books.Id) AS BookCount
+   FROM 
+       Authors
+   LEFT JOIN 
+       Books ON Authors.Id = Books.AuthorId
+   GROUP BY 
+       Authors.AuthorName;
+
+4. Автор без книг:
+  
+   SELECT 
+       Authors.AuthorName
+   FROM 
+       Authors
+   LEFT JOIN 
+       Books ON Authors.Id = Books.AuthorId
+   WHERE 
+       Books.Id IS NULL;
